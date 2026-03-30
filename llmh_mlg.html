@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LLMH MLG</title>
+
+<style>
+body {
+  margin:0;
+  overflow:hidden;
+  background:black;
+  color:white;
+  font-family:Impact, Arial;
+}
+
+/* CONTENEUR TEXTE */
+.title-container {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  z-index:9999;
+  pointer-events:none;
+  animation: spin 2s linear infinite;
+}
+
+h1 {
+  font-size:70px;
+  color:red;
+  margin:0;
+  animation: flash 0.2s infinite;
+  text-shadow: 
+    0 0 2px red,
+    0 0 5px red,
+    0 0 10px yellow;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* LOGOS */
+img.logo {
+  position:absolute;
+  width:150px;
+  z-index:1;
+  animation: move 2s infinite alternate, rotate 1s linear infinite;
+}
+
+/* LASERS */
+.laser {
+  position:absolute;
+  width:5px;
+  height:200px;
+  background:red;
+  z-index:2;
+  transform:rotate(45deg);
+}
+
+/* EXPLOSIONS */
+.explosion {
+  position:absolute;
+  width:200px;
+  z-index:3;
+}
+
+/* ANIMATIONS */
+@keyframes spin {
+  0% {transform:translate(-50%, -50%) rotate(0deg);}
+  100% {transform:translate(-50%, -50%) rotate(360deg);}
+}
+
+@keyframes move {
+  0% {top:0%; left:0%;}
+  100% {top:80%; left:80%;}
+}
+
+@keyframes rotate {
+  0% {transform:rotate(0deg);}
+  100% {transform:rotate(360deg);}
+}
+
+@keyframes flash {
+  0% {opacity:1;}
+  50% {opacity:0;}
+  100% {opacity:1;}
+}
+</style>
+</head>
+
+<body onclick="chaos()">
+
+<div class="title-container">
+  <h1>LONGUE VIE AU LLMH</h1>
+</div>
+
+<img src="logo.png" class="logo">
+<img src="logo.png" class="logo" style="top:70%;left:10%;">
+<img src="logo.png" class="logo" style="top:10%;left:70%;">
+
+<!-- SONS -->
+<audio id="airhorn" src="https://www.myinstants.com/media/sounds/mlg-airhorn.mp3"></audio>
+<audio id="wow" src="https://www.myinstants.com/media/sounds/wow.mp3"></audio>
+<audio id="hit" src="https://www.myinstants.com/media/sounds/hitmarker_2.mp3"></audio>
+
+<script>
+
+function chaos(){
+  playSounds();
+  spawnExplosion();
+  spawnLaser();
+  screenShake();
+}
+
+function playSounds(){
+  document.getElementById('airhorn').play();
+  document.getElementById('wow').play();
+  document.getElementById('hit').play();
+}
+
+function spawnExplosion(){
+  let boom = document.createElement("img");
+  boom.src = "https://media.giphy.com/media/oe33xf3B50fsc/giphy.gif";
+  boom.className = "explosion";
+  boom.style.top = Math.random()*80 + "%";
+  boom.style.left = Math.random()*80 + "%";
+  document.body.appendChild(boom);
+
+  setTimeout(()=>{boom.remove();},800);
+}
+
+function spawnLaser(){
+  let laser = document.createElement("div");
+  laser.className = "laser";
+  laser.style.top = Math.random()*100 + "%";
+  laser.style.left = Math.random()*100 + "%";
+  document.body.appendChild(laser);
+
+  setTimeout(()=>{laser.remove();},300);
+}
+
+function screenShake(){
+  let i = 0;
+  let interval = setInterval(()=>{
+    document.body.style.transform =
+      "translate(" + (Math.random()*10-5) + "px," + (Math.random()*10-5) + "px)";
+    i++;
+    if(i > 10){
+      clearInterval(interval);
+      document.body.style.transform = "translate(0,0)";
+    }
+  },50);
+}
+
+/* CHAOS AUTOMATIQUE */
+setInterval(()=>{
+  spawnExplosion();
+  spawnLaser();
+}, 500);
+
+</script>
+
+</body>
+</html>
