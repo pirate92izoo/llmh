@@ -160,6 +160,20 @@ setInterval(()=>{
 }, 500);
 
 </script>
+// Script pour mobile : déclenche le chaos au premier touch
+let cover = document.createElement('div');
+cover.id = "cover";
+cover.style.position = "fixed";
+cover.style.top = "0";
+cover.style.left = "0";
+cover.style.width = "100%";
+cover.style.height = "100%";
+cover.style.zIndex = "9999";
+document.body.appendChild(cover);
 
+cover.addEventListener('touchstart', () => {
+    chaos();          // déclenche sons + explosions
+    cover.remove();   // retire la couverture invisible
+}, {once:true});
 </body>
 </html>
