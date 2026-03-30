@@ -96,13 +96,12 @@ img.logo {
 <img src="logo.png" class="logo" style="top:70%;left:10%;">
 <img src="logo.png" class="logo" style="top:10%;left:70%;">
 
-<!-- SONS -->
-<audio id="airhorn" src="https://www.myinstants.com/media/sounds/mlg-airhorn.mp3"></audio>
-<audio id="wow" src="https://www.myinstants.com/media/sounds/wow.mp3"></audio>
-<audio id="hit" src="https://www.myinstants.com/media/sounds/hitmarker_2.mp3"></audio>
+<!-- SONS HÉBERGÉS -->
+<audio id="airhorn" src="sounds/airhorn.mp3"></audio>
+<audio id="wow" src="sounds/wow.mp3"></audio>
+<audio id="hit" src="sounds/hit.mp3"></audio>
 
 <script>
-
 function chaos(){
   playSounds();
   spawnExplosion();
@@ -111,9 +110,15 @@ function chaos(){
 }
 
 function playSounds(){
-  document.getElementById('airhorn').play();
-  document.getElementById('wow').play();
-  document.getElementById('hit').play();
+  // Lecture avec petit délai pour éviter blocage
+  let airhorn = document.getElementById('airhorn');
+  let wow = document.getElementById('wow');
+  let hit = document.getElementById('hit');
+
+  airhorn.play().then(()=>{
+    setTimeout(()=> wow.play(), 200);
+    setTimeout(()=> hit.play(), 400);
+  }).catch(err => console.log("Erreur audio:", err));
 }
 
 function spawnExplosion(){
@@ -123,7 +128,6 @@ function spawnExplosion(){
   boom.style.top = Math.random()*80 + "%";
   boom.style.left = Math.random()*80 + "%";
   document.body.appendChild(boom);
-
   setTimeout(()=>{boom.remove();},800);
 }
 
@@ -133,10 +137,14 @@ function spawnLaser(){
   laser.style.top = Math.random()*100 + "%";
   laser.style.left = Math.random()*100 + "%";
   document.body.appendChild(laser);
-
   setTimeout(()=>{laser.remove();},300);
 }
 
+function screenShake(){
+  // Shake simple du body
+  document.body.style.transform = "translate(" + (Math.random()*20-10) + "px," + (Math.random()*20-10) + "px)";
+  setTimeout(()=>{document.body.style.transform = ""},100);
+}
 
 /* CHAOS AUTOMATIQUE */
 setInterval(()=>{
