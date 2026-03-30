@@ -86,7 +86,7 @@ img.logo {
 </style>
 </head>
 
-<body onclick="chaos()">
+<body>
 
 <div class="title-container">
   <h1>LONGUE VIE AU LLMH</h1>
@@ -99,9 +99,10 @@ img.logo {
 <!-- SONS HÉBERGÉS -->
 <audio id="airhorn" src="mlg-airhorn.mp3"></audio>
 <audio id="wow" src="wow.mp3"></audio>
-<audio id="hit" src="hitmarket_2.mp3"></audio>
+<audio id="hit" src="hitmarker_2.mp3"></audio>
 
 <script>
+// ======= FONCTIONS PRINCIPALES =======
 function chaos(){
   playSounds();
   spawnExplosion();
@@ -110,18 +111,11 @@ function chaos(){
 }
 
 function playSounds(){
-  // Lecture avec petit délai pour éviter blocage
-let airhorn = document.getElementById('airhorn');
-let wow = document.getElementById('wow');
-let hit = document.getElementById('hit');
+  let airhorn = document.getElementById('airhorn');
+  let wow = document.getElementById('wow');
+  let hit = document.getElementById('hit');
 
-// Au premier clic, charger et jouer un son silencieux pour "débloquer"
-document.body.addEventListener('touchstart', ()=> {
-  airhorn.play().then(()=> airhorn.pause());
-  wow.play().then(()=> wow.pause());
-  hit.play().then(()=> hit.pause());
-}, {once:true});
-
+  // Jouer les sons avec un petit délai pour éviter blocage
   airhorn.play().then(()=>{
     setTimeout(()=> wow.play(), 200);
     setTimeout(()=> hit.play(), 400);
@@ -148,21 +142,23 @@ function spawnLaser(){
 }
 
 function screenShake(){
-  // Shake simple du body
   document.body.style.transform = "translate(" + (Math.random()*20-10) + "px," + (Math.random()*20-10) + "px)";
   setTimeout(()=>{document.body.style.transform = ""},100);
 }
 
-/* CHAOS AUTOMATIQUE */
+// Chaos automatique (explosions + lasers)
 setInterval(()=>{
   spawnExplosion();
   spawnLaser();
 }, 500);
 
-</script>
-// Script pour mobile : déclenche le chaos au premier touch
+// ======= EFFET SURPRISE PC =======
+window.onload = () => {
+  if (!('ontouchstart' in window)) chaos(); // PC uniquement
+};
+
+// ======= EFFET SURPRISE MOBILE =======
 let cover = document.createElement('div');
-cover.id = "cover";
 cover.style.position = "fixed";
 cover.style.top = "0";
 cover.style.left = "0";
@@ -175,5 +171,7 @@ cover.addEventListener('touchstart', () => {
     chaos();          // déclenche sons + explosions
     cover.remove();   // retire la couverture invisible
 }, {once:true});
+</script>
+
 </body>
 </html>
