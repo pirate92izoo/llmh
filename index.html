@@ -98,8 +98,8 @@ img.logo {
 
 <!-- SONS HÉBERGÉS -->
 <audio id="airhorn" src="airhorn.mp3"></audio>
-<audio id="wow" src="wow.mp3"></audio>
-<audio id="hit" src="hit.mp3"></audio>
+// <audio id="wow" src="wow.mp3"></audio>
+// <audio id="hit" src="hit.mp3"></audio>
 
 <script>
 function chaos(){
@@ -112,14 +112,14 @@ function chaos(){
 function playSounds(){
   // Lecture avec petit délai pour éviter blocage
   let airhorn = document.getElementById('airhorn');
-let wow = document.getElementById('wow');
-let hit = document.getElementById('hit');
+//let wow = document.getElementById('wow');
+//let hit = document.getElementById('hit');
 
 // Au premier clic, charger et jouer un son silencieux pour "débloquer"
 document.body.addEventListener('touchstart', ()=> {
   airhorn.play().then(()=> airhorn.pause());
-  wow.play().then(()=> wow.pause());
-  hit.play().then(()=> hit.pause());
+//  wow.play().then(()=> wow.pause());
+//  hit.play().then(()=> hit.pause());
 }, {once:true});
 
   airhorn.play().then(()=>{
