@@ -110,16 +110,31 @@ function chaos(){
   screenShake();
 }
 
-function playSounds(){
+function playSounds() {
   let airhorn = document.getElementById('airhorn');
   let wow = document.getElementById('wow');
   let hit = document.getElementById('hit');
 
-  // Jouer les sons avec un petit délai pour éviter blocage
-  airhorn.play().then(()=>{
-    setTimeout(()=> wow.play(), 200);
-    setTimeout(()=> hit.play(), 400);
-  }).catch(err => console.log("Erreur audio:", err));
+  // ----- AIRHORN EN BOUCLE -----
+  airhorn.loop = true; // active la boucle
+  airhorn.play().catch(err => console.log("Erreur audio:", err));
+
+  // ----- HITMARKER EN MODE 'PIOU PIOU' -----
+  let hitInterval = setInterval(() => {
+    let clone = hit.cloneNode(); // clone pour pouvoir superposer les sons
+    document.body.appendChild(clone); // nécessaire pour que certains navigateurs jouent le son
+    clone.play().then(()=> setTimeout(()=> clone.remove(), 1000)).catch(()=>{}); 
+  }, 150); // toutes les 150ms => effet rafale
+
+  // STOP HIT ET AIRHORN APRÈS 5 SECONDES (optionnel)
+  setTimeout(() => {
+    airhorn.pause();
+    airhorn.currentTime = 0;
+    clearInterval(hitInterval);
+  }, 5000);
+  
+  // ----- WOW UNE FOIS -----
+  wow.play().catch(()=>{});
 }
 
 function spawnExplosion(){
