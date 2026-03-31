@@ -125,7 +125,8 @@ img.logo {
 <audio id="airhorn" src="mlg-airhorn.mp3"></audio>
 <audio id="wow" src="wow.mp3"></audio>
 <audio id="hit" src="hitmarker_2.mp3"></audio>
-
+<audio id="mlg" src="mlg.mp3"></audio>
+  
 <script>
 // ======= FONCTIONS PRINCIPALES =======
 function chaos(){
@@ -139,6 +140,7 @@ function playSounds() {
   let airhorn = document.getElementById('airhorn');
   let wow = document.getElementById('wow');
   let hit = document.getElementById('hit');
+   let mlg = document.getElementById('mlg');
 
   // ----- AIRHORN EN BOUCLE -----
   airhorn.loop = true; // active la boucle
@@ -156,7 +158,7 @@ function playSounds() {
     airhorn.pause();
     airhorn.currentTime = 0;
     clearInterval(hitInterval);
-  }, 5000);
+  }, 10000);
   
   // ----- WOW UNE FOIS -----
   wow.play().catch(()=>{});
