@@ -5,7 +5,7 @@
 <title>LLMH MLG</title>
 
 <style>
-/* GORILLE FIXE */
+/* GORILLE */
 .gorille-container {
   position: fixed;
   bottom: 10px;
@@ -17,15 +17,16 @@
 .gorille-container img {
   width: 500px;
 }
-  
+
 .gorille-text {
   color: white;
   font-size: 50px;
   font-family: Impact, Arial;
   margin-bottom: 5px;
 }
-  
-  body {
+
+/* BASE */
+body {
   margin:0;
   overflow:hidden;
   background:black;
@@ -33,7 +34,7 @@
   font-family:Impact, Arial;
 }
 
-/* CONTENEUR TEXTE */
+/* TEXTE */
 .title-container {
   position:absolute;
   top:50%;
@@ -82,7 +83,7 @@ img.logo {
   z-index:3;
 }
 
-/* ANIMATIONS */
+/* ANIM */
 @keyframes spin {
   0% {transform:translate(-50%, -50%) rotate(0deg);}
   100% {transform:translate(-50%, -50%) rotate(360deg);}
@@ -106,29 +107,32 @@ img.logo {
 </style>
 </head>
 
-  <div class="gorille-container">
-  <div class="gorille-text">FUCK LMHL</div>
-  <img src="gorille.png" alt="gorille">
-</div>
-  
-<body>
+<body onclick="chaos()">
 
+<!-- GORILLE -->
+<div class="gorille-container">
+  <div class="gorille-text">FUCK LMHL</div>
+  <img src="gorille.png">
+</div>
+
+<!-- TEXTE -->
 <div class="title-container">
   <h1>LLMH FOREVER</h1>
 </div>
 
+<!-- LOGOS -->
 <img src="logo.png" class="logo">
 <img src="logo.png" class="logo" style="top:70%;left:10%;">
 <img src="logo.png" class="logo" style="top:10%;left:70%;">
 
-<!-- SONS HÉBERGÉS -->
+<!-- SONS -->
 <audio id="airhorn" src="mlg-airhorn.mp3"></audio>
-<audio id="wow" src="wow.mp3"></audio>
 <audio id="hit" src="hitmarker_2.mp3"></audio>
 <audio id="mlg" src="mlg.mp3"></audio>
-  
+
 <script>
-// ======= FONCTIONS PRINCIPALES =======
+
+// ===== CHAOS GLOBAL =====
 function chaos(){
   playSounds();
   spawnExplosion();
@@ -136,34 +140,49 @@ function chaos(){
   screenShake();
 }
 
+// ===== AUDIO FIX PC =====
 function playSounds() {
   let airhorn = document.getElementById('airhorn');
-  let wow = document.getElementById('wow');
   let hit = document.getElementById('hit');
   let mlg = document.getElementById('mlg');
 
-  // ----- AIRHORN EN BOUCLE -----
-  airhorn.loop = true; // active la boucle
-  airhorn.play().catch(err => console.log("Erreur audio:", err));
+  airhorn.volume = 1.0;
+  mlg.volume = 1.0;
 
-  // ----- HITMARKER EN MODE 'PIOU PIOU' -----
-  let hitInterval = setInterval(() => {
-    let clone = hit.cloneNode(); // clone pour pouvoir superposer les sons
-    document.body.appendChild(clone); // nécessaire pour que certains navigateurs jouent le son
-    clone.play().then(()=> setTimeout(()=> clone.remove(), 1000)).catch(()=>{}); 
-  }, 150); // toutes les 150ms => effet rafale
-
-  // STOP HIT ET AIRHORN APRÈS 5 SECONDES (optionnel)
-  setTimeout(() => {
+  // Déblocage audio (important PC)
+  airhorn.muted = true;
+  airhorn.play().then(() => {
     airhorn.pause();
+    airhorn.muted = false;
+
+    // AIRHORN
+    airhorn.loop = true;
     airhorn.currentTime = 0;
-    clearInterval(hitInterval);
-  }, 10000);
-  
-  // ----- WOW UNE FOIS -----
-  mlg.play().catch(()=>{});
+    airhorn.play();
+
+    // HIT EN RAFALE
+    let hitInterval = setInterval(() => {
+      let clone = hit.cloneNode();
+      document.body.appendChild(clone);
+      clone.play().then(()=> setTimeout(()=> clone.remove(), 500)).catch(()=>{});
+    }, 120);
+
+    // STOP après 10 sec
+    setTimeout(() => {
+      airhorn.pause();
+      clearInterval(hitInterval);
+    }, 10000);
+
+    // SON MLG
+    mlg.currentTime = 0;
+    mlg.play();
+
+  }).catch(err => {
+    console.log("Audio bloqué:", err);
+  });
 }
 
+// ===== FX =====
 function spawnExplosion(){
   let boom = document.createElement("img");
   boom.src = "https://media.giphy.com/media/oe33xf3B50fsc/giphy.gif";
@@ -184,22 +203,18 @@ function spawnLaser(){
 }
 
 function screenShake(){
-  document.body.style.transform = "translate(" + (Math.random()*20-10) + "px," + (Math.random()*20-10) + "px)";
+  document.body.style.transform =
+    "translate(" + (Math.random()*20-10) + "px," + (Math.random()*20-10) + "px)";
   setTimeout(()=>{document.body.style.transform = ""},100);
 }
 
-// Chaos automatique (explosions + lasers)
+// CHAOS AUTO
 setInterval(()=>{
   spawnExplosion();
   spawnLaser();
 }, 500);
 
-// ======= EFFET SURPRISE PC =======
-window.onload = () => {
-  if (!('ontouchstart' in window)) chaos(); // PC uniquement
-};
-
-// ======= EFFET SURPRISE MOBILE =======
+// ===== MOBILE TRIGGER =====
 let cover = document.createElement('div');
 cover.style.position = "fixed";
 cover.style.top = "0";
@@ -209,10 +224,11 @@ cover.style.height = "100%";
 cover.style.zIndex = "9999";
 document.body.appendChild(cover);
 
-cover.addEventListener('touchstart', () => {
-    chaos();          // déclenche sons + explosions
-    cover.remove();   // retire la couverture invisible
+cover.addEventListener('click', () => {
+  chaos();
+  cover.remove();
 }, {once:true});
+
 </script>
 
 </body>
